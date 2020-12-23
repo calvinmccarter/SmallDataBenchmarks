@@ -24,6 +24,7 @@ database = pd.read_json("database.json").T
 # which means we are just going to be using each feature as continuous even though it
 # may not be
 database = database[database.mv == 0]
+database = database[databaes.nrow >= 50]
 
 
 def load_data(data_name):
@@ -86,10 +87,15 @@ results3 = []
 evaluated_datasets = []
 for i, dataset_name in enumerate(database.index.values):
     X, y = load_data(dataset_name)
-    if len(y) > 25 and len(y) < 1000:
-        print(i, dataset_name, len(y))
-        nested_scores1, nested_scores2, nested_scores3 = define_and_evaluate_pipelines(X, y)
-        results1.append(nested_scores1)
-        results2.append(nested_scores2)
-        results3.append(nested_scores3)
-        evaluated_datasets.append(dataset_name)
+    numpy.random.seed(0)
+    if len(y) > 10000:
+        # subset to 10000
+        random_idx = np.random.choice(len(y), 10000 replace=False)
+        X = X[random_idx, :]
+        y = y[random_idx]
+    print(i, dataset_name, len(y))
+    nested_scores1, nested_scores2, nested_scores3 = define_and_evaluate_pipelines(X, y)
+    results1.append(nested_scores1)
+    results2.append(nested_scores2)
+    results3.append(nested_scores3)
+    evaluated_datasets.append(dataset_name)
