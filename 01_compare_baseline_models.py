@@ -16,7 +16,7 @@ from sklearn.svm import SVC
 from utils import load_data
 
 
-N_JOBS = 4 * 4 * 9
+N_JOBS = 1 #4 * 4 * 9
 
 
 database = pd.read_json("database.json").T
@@ -95,6 +95,7 @@ for i, dataset_name in enumerate(database.index.values):
                 random_idx = np.random.choice(len(y), 10000, replace=False)
                 X = X[random_idx, :]
                 y = y[random_idx]
+            y=y.astype('int')
             print("starting:", dataset_name, X.shape)
             start = time.time()
             nested_scores1, nested_scores2, nested_scores3 = define_and_evaluate_pipelines(X, y)
@@ -115,5 +116,5 @@ evaluated_datasets = np.array(evaluated_datasets)
 times = np.array(times)
 
 # save everything to disk so we can make plots elsewhere
-with open("results/01_compare_baseline_models.pickle", "wb") as f:
+with open("results/01_compare_baseline_models.pickle2", "wb") as f:
     pickle.dump((results1, results2, results3, evaluated_datasets, times), f)
