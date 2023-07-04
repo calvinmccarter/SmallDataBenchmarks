@@ -16,11 +16,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from utils import load_data
 
-from simple_transformers import TwoLayerNetClassifier
+from simple_nns import TwoLayerNetClassifier
 
 
 N_JOBS = 1 #4 * 4 * 9
-
 
 database = pd.read_json("database.json").T
 # note: this meta-dataset has swallowed information about what's categorical and what isn't
@@ -50,7 +49,7 @@ def define_and_evaluate_pipelines(X, y, random_state=0):
         N_o,
         (2/3)*N_i + N_o,
     ]
-    n_hiddens = np.geomspace(min(strats), max(strats), 7).astype('int')
+    n_hiddens = np.geomspace(max(1, min(strats)), max(strats), 7).astype('int')
 
     # Fully-connected
     pipeline1 = TwoLayerNetClassifier(method="fc-relu")
